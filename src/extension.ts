@@ -46,7 +46,9 @@ export function activate(context: vscode.ExtensionContext) {
         args.push('-f', message.filter.trim());
       }
       if (message.execute && message.execute.trim() !== '') {
-        args.push('-x', message.execute.trim());
+        // Always wrap the -x parameter value in single quotes
+        const execParam = message.execute.trim();
+        args.push('-x', execParam);
       }
       if (message.query) { // -q now stands for Query
         args.push('-q');
@@ -74,14 +76,14 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInformationMessage(`Python script exited with code ${code}`);
         if (code === 0) {
           vscode.workspace.openTextDocument({ content: outputData, language: 'csv' })
-            .then(doc => vscode.window.showTextDocument(doc));
+            .then(doc => vscode.window.showTextDocument(doc, editor.viewColumn));
         } else {
           vscode.window.showErrorMessage(`Python script exited with code ${code}`);
         }
       });
 
-      // Optionally close the panel once submission is processed.
-      panel.dispose();
+      // Remove panel.dispose() to keep the window open.
+      // panel.dispose();
     });
   });
 
