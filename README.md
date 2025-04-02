@@ -30,7 +30,7 @@ Click Submit. The extension will run the Python script with your parameters, and
 - **User-Friendly Interface:**  
   The web view panel opens split on the right, making it easy to enter options while viewing your CSV file.
 
-![CSV Formatter Screenshot](images/csv-formatter.png)
+![CSV Formatter Screenshot](images/csvformatter.png)
 
 > Tip: Consider adding short animations or additional screenshots to showcase your extension in action.
 
