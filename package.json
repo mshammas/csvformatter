@@ -2,6 +2,10 @@
   "name": "csvformatter",
   "displayName": "CSVFormatter",
   "publisher": "mshammas",  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mshammas/csvformatter.git"
+  },  
   "description": "Extension to format print a CSV file with variety of filtering options.",
   "version": "0.0.1",
   "engines": {
