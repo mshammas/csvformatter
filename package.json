@@ -8,7 +8,7 @@
   },  
   "description": "Extension to format print a CSV file with variety of filtering options.",
   "version": "0.0.1",
-  "icon": "logo.svg",
+  "icon": "logo.png",
   "engines": {
     "vscode": "^1.98.0"
   },

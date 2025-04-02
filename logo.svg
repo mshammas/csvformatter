@@ -15,4 +15,5 @@
  <text x="128" y="120" font-family="Arial, sans-serif" font-size="32" fill="#333333" text-anchor="middle">
   <tspan x="128" dy="0">CSV</tspan>
   <tspan x="128" dy="35">Formatter</tspan>
-</text> 
+ </text>
+</svg> 
