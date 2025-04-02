@@ -1,5 +1,3 @@
-Below is an example of a README.md following the provided format. You can copy and paste the code block into your README.md file.
-
 # csvformatter README
 
 This is the README for your extension "csvformatter". After writing up a brief description, we recommend including the following sections.
@@ -78,4 +76,3 @@ You can author your README using Visual Studio Code. Here are some useful editor
 
 **Enjoy!**
 
-This README follows the default format while providing detailed information about CSVFormatter, its requirements, settings, and usage instructions. Feel free to adjust any content to better match your extension’s specifics.
