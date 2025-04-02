@@ -1,7 +1,7 @@
 {
   "name": "csvformatter",
   "displayName": "CSVFormatter",
-  "publisher": "mshammas",  
+  "publisher": "shammas",  
   "repository": {
     "type": "git",
     "url": "https://github.com/mshammas/csvformatter.git"
