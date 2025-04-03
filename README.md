@@ -2,22 +2,26 @@
 
 csvformatter is an extension which works on CSV files to print them in a table format. It also provides a variety of options to filter the columns.
 
-Usage:
-	1.	Open a CSV File:
-Open any CSV file in VS Code.
-	2.	Trigger the Command:
-Open the Command Palette (Ctrl+Shift+P or Cmd+Shift+P) and select CSVFormatter: Format CSV.
-	3.	Enter Parameters:
-A web view panel will open on the right side of your editor. Fill in the parameters:
-	•	Max Size (-s): Maximum character count per column (default is 20; enter all to display full content).
-	•	Columns (-c): Specify the number of columns to display (e.g., 2 to display the first two columns).
-	•	Range (-r): Enter a list of column numbers separated by hyphens (e.g., 1-3-4).
-	•	Filter (-f): Filter rows by specifying a column and its values (e.g., 3-Integer-float).
-	•	Execute (-x): Execute a shell command on a column value (e.g., 1-"awk -F. '{print \\$5}'").
-	•	Query (-q): Check this box to print the CSV header with column indices and exit.
-	•	Output (-o): Enter an output filename to save the formatted CSV (if left blank, the output will be shown in a new editor tab).
-	4.	Submit the Form:
-Click Submit. The extension will run the Python script with your parameters, and you’ll see the formatted output either in a new tab or saved to the specified file.
+## Usage
+
+1. **Open a CSV File**  
+   Open any CSV file in VS Code.
+
+2. **Trigger the Command**  
+   Open the Command Palette (`Ctrl+Shift+P` on Windows/Linux or `Cmd+Shift+P` on macOS) and select **CSVFormatter: Format CSV**.
+
+3. **Enter Parameters**  
+   A web view panel will open on the right side of your editor. Fill in the parameters:
+   - **Max Size (-s):** Maximum character count per column (default is `20`; enter `all` to display full content).
+   - **Columns (-c):** Specify the number of columns to display (e.g., `2` to display the first two columns).
+   - **Range (-r):** Enter a list of column numbers separated by hyphens (e.g., `1-3-4`).
+   - **Filter (-f):** Filter rows by specifying a column and its values (e.g., `3-Integer-float`).
+   - **Execute (-x):** Execute a shell command on a column value (e.g., `1-"awk -F. '{print \$5}'"`).
+   - **Query (-q):** Check this box to print the CSV header with column indices and exit.
+   - **Output (-o):** Enter an output filename to save the formatted CSV (if left blank, the output will be shown in a new editor tab).
+
+4. **Submit the Form**  
+   Click **Submit**. The extension will run the Python script with your parameters, and you’ll see the formatted output either in a new tab or saved to the specified file.
 
 ## Features
 
