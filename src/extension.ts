@@ -46,10 +46,10 @@ export function activate(context: vscode.ExtensionContext) {
         args.push('-f', message.filter.trim());
       }
       if (message.execute && message.execute.trim() !== '') {
-        // Always wrap the -x parameter value in single quotes
+        // Do not wrap the command in additional quotes.
         const execParam = message.execute.trim();
         args.push('-x', execParam);
-      }
+      }      
       if (message.query) { // -q now stands for Query
         args.push('-q');
       }
@@ -132,7 +132,7 @@ function getWebviewContent() {
       <form id="csvForm">
         <div class="form-group">
           <label for="size">Max Size (-s):</label>
-          <input type="text" id="size" name="size" placeholder="20 or all">
+          <input type="text" id="size" name="size" placeholder="default:20, all for fullsize">
         </div>
         <div class="form-group">
           <label for="columns">Columns (-c):</label>
@@ -148,7 +148,13 @@ function getWebviewContent() {
         </div>
         <div class="form-group">
           <label for="execute">Execute (-x):</label>
-          <input type="text" id="execute" name="execute" placeholder='e.g., 1-"awk -F. \'{print \\$5}\'"'>
+          <input
+            type="text"
+            id="execute"
+            name="execute"
+            placeholder="1-&quot;awk -F. '{print $5}'&quot;"
+            style="width: 400px; padding: 5px;"
+          >          
         </div>
         <div class="form-group">
           <label for="query">Query (-q):</label>

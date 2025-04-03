@@ -63,6 +63,7 @@ import csv
 import argparse
 import sys
 import subprocess
+import os
 
 def read_csv(filename):
     """Read the CSV file and return its contents as a list of rows."""
@@ -203,18 +204,35 @@ Options:
 
     if args.execute:
         for rule in args.execute:
+            rule = rule.strip()
+            # Remove wrapping quotes from the entire rule if present.
+            if (rule.startswith('"') and rule.endswith('"')) or (rule.startswith("'") and rule.endswith("'")):
+                rule = rule[1:-1]
             try:
                 col_str, cmd = rule.split('-', 1)
                 col_index = int(col_str) - 1
             except Exception as e:
                 print(f"Error parsing execute rule '{rule}': {e}")
                 sys.exit(1)
+            
+            # Now clean the command string by removing wrapping quotes if any.
+            cmd = cmd.strip()
+            if (cmd.startswith('"') and cmd.endswith('"')) or (cmd.startswith("'") and cmd.endswith("'")):
+                cmd = cmd[1:-1]
+            
             for i in range(1, len(data)):
                 if col_index < len(data[i]):
                     original_value = data[i][col_index]
                     try:
-                        result = subprocess.run(cmd, input=original_value, text=True,
-                                                shell=True, capture_output=True)
+                        result = subprocess.run(
+                            cmd,
+                            input=original_value,
+                            text=True,
+                            shell=True,
+                            capture_output=True,
+                            executable="/bin/bash",
+                            env=os.environ.copy()
+                        )
                         new_value = result.stdout.strip() if result.returncode == 0 else original_value
                     except Exception as e:
                         print(f"Error executing command '{cmd}' on '{original_value}': {e}")
