@@ -2,7 +2,7 @@
 
 All notable changes to csvformatter project will be documented in this file.
 
-## [0.0.5] - 2025-04-01
+## [0.0.5] - 2025-04-03
 ### Changed
 - Fixed issue with the `-x` option; commands now execute correctly (e.g., awk, sed, grep).
 - Made editorial changes to the documentation and README.
