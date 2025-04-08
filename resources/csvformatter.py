@@ -41,8 +41,12 @@ Options:
       Example: -r 1-3-5 prints columns 1, 3, and 5.
 
   -f, --filter <column>-<value1>-<value2>-...
-      Filter rows where the specified column (1-indexed) equals one of the given values.
-      Example: -f 3-Integer-float displays rows where column 3 is either "Integer" or "float".
+      Filter rows where the specified column (1-indexed) equals one or more given values.
+      To use regex filtering, prefix a value with "regex:".
+      Examples:
+         -f 3-Integer-float
+         -f 2-regex:^A.*$
+      (In the second example, rows where column 2 matches the regex '^A.*$' are shown.)
 
   -x, --execute <column>-<command>
       Execute a shell command on the value of the specified column (1-indexed).
@@ -64,6 +68,7 @@ import argparse
 import sys
 import subprocess
 import os
+import re  # Required for regex filtering
 
 def read_csv(filename):
     """Read the CSV file and return its contents as a list of rows."""
@@ -113,32 +118,26 @@ Options:
   -s, --size <value>
       Set maximum character count per column (default: 20).
       Use "all" to display full cell contents.
-      Examples:
-         -s 15      -> Truncate cells to 15 characters.
-         -s all     -> Show full cell content.
 
   -c, --columns <N>
       Print only the first N columns.
-      Example: -c 2 prints only the first two columns.
 
   -r, --range <list>
       Select specific columns to display (1-indexed), separated by hyphens.
-      Example: -r 1-3-5 prints columns 1, 3, and 5.
 
   -f, --filter <column>-<value1>-<value2>-...
-      Filter rows where the specified column (1-indexed) equals one of the given values.
-      Example: -f 3-Integer-float displays rows where column 3 is either "Integer" or "float".
+      Filter rows where the specified column (1-indexed) equals one or more given values.
+      To use regex filtering, prefix a value with "regex:".
+      Examples:
+         -f 3-Integer-float
+         -f 2-regex:^A.*$
 
   -x, --execute <column>-<command>
-      Execute a shell command on the value of the specified column (1-indexed).
-      The command receives the cell value via standard input, and its output replaces the original value.
-      NOTE:
-         • When using commands like awk that use a dollar sign (e.g. "$5"), escape the dollar sign as \\$5.
-         • If -r is used, the column index for -x corresponds to the columns of the filtered output.
-      Example: -x 1-"awk -F. '{print \\$5}'" applies the awk command to column 1.
+      Execute a shell command on a column value. Format: <column>-<command>.
+      Example: -x 1-"awk -F. '{print \\$5}'" 
 
   -q, --quick
-      Print the CSV header with column indices (1-indexed) and exit.
+      Print CSV header with column indices (1-indexed) and exit.
 
   -o, --output <filename>
       Save the filtered CSV data (without truncation) to the specified file.
@@ -156,10 +155,10 @@ Options:
     parser.add_argument("-r", "--range", type=str,
                         help="List of column numbers to print, separated by '-' (e.g., 1-3-4)")
     parser.add_argument("-f", "--filter", type=str,
-                        help="Filter rows in the format <column>-<value1>-<value2>-... (e.g., 3-Integer-float)")
+                        help="Filter rows in the format <column>-<value1>-<value2>-... "
+                             "For regex filtering prefix a value with 'regex:'")
     parser.add_argument("-x", "--execute", action="append",
-                        help="Execute a shell command on a column value. Format: <column>-<command>. "
-                             "Example: -x 1-\"awk -F. '{print \\$5}'\"")
+                        help="Execute a shell command on a column value. Format: <column>-<command>.")
     parser.add_argument("-q", "--quick", action="store_true",
                         help="Print CSV header with column index numbers and exit")
     parser.add_argument("-o", "--output", type=str,
@@ -178,6 +177,7 @@ Options:
             print(f"{index}: {col}")
         sys.exit(0)
 
+    # Process filtering - support literal and regex filters
     if args.filter is not None:
         try:
             filter_parts = args.filter.split("-")
@@ -188,8 +188,38 @@ Options:
         except Exception as e:
             print(f"Error parsing filter: {e}")
             sys.exit(1)
+        
+        allowed_filters = []
+        for value in allowed_values:
+            value = value.strip()
+            if value.startswith("regex:"):
+                pattern = value[len("regex:"):]
+                try:
+                    regex = re.compile(pattern)
+                except re.error as e:
+                    print(f"Invalid regex '{pattern}': {e}")
+                    sys.exit(1)
+                allowed_filters.append(("regex", regex))
+            else:
+                allowed_filters.append(("literal", value))
+        
         header = data[0]
-        filtered_rows = [row for row in data[1:] if filter_col_index < len(row) and row[filter_col_index] in allowed_values]
+        filtered_rows = []
+        for row in data[1:]:
+            if filter_col_index < len(row):
+                cell_value = row[filter_col_index]
+                matched = False
+                for typ, criterion in allowed_filters:
+                    if typ == "literal":
+                        if cell_value == criterion:
+                            matched = True
+                            break
+                    else:
+                        if criterion.search(cell_value):
+                            matched = True
+                            break
+                if matched:
+                    filtered_rows.append(row)
         data = [header] + filtered_rows
 
     if args.range is not None:
@@ -202,6 +232,7 @@ Options:
     elif args.columns is not None:
         data = [row[:args.columns] for row in data]
 
+    # Process execution commands (-x option)
     if args.execute:
         for rule in args.execute:
             rule = rule.strip()
@@ -215,11 +246,12 @@ Options:
                 print(f"Error parsing execute rule '{rule}': {e}")
                 sys.exit(1)
             
-            # Now clean the command string by removing wrapping quotes if any.
+            # Clean the command string by removing wrapping quotes if any.
             cmd = cmd.strip()
             if (cmd.startswith('"') and cmd.endswith('"')) or (cmd.startswith("'") and cmd.endswith("'")):
                 cmd = cmd[1:-1]
             
+            # Execute command for each row starting from row index 1 (skip header)
             for i in range(1, len(data)):
                 if col_index < len(data[i]):
                     original_value = data[i][col_index]
@@ -233,7 +265,11 @@ Options:
                             executable="/bin/bash",
                             env=os.environ.copy()
                         )
-                        new_value = result.stdout.strip() if result.returncode == 0 else original_value
+                        # For grep, note that exit code 1 is acceptable (no match)
+                        if result.returncode in (0, 1):
+                            new_value = result.stdout.strip()
+                        else:
+                            new_value = original_value
                     except Exception as e:
                         print(f"Error executing command '{cmd}' on '{original_value}': {e}")
                         new_value = original_value

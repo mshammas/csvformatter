@@ -144,7 +144,7 @@ function getWebviewContent() {
         </div>
         <div class="form-group">
           <label for="filter">Filter (-f):</label>
-          <input type="text" id="filter" name="filter" placeholder="e.g., 3-Integer-float">
+          <input type="text" id="filter" name="filter" placeholder="e.g., 3-"regex:*.32M.*" or a simple 3-general>
         </div>
         <div class="form-group">
           <label for="execute">Execute (-x):</label>

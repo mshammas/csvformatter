@@ -1,11 +1,22 @@
 # Changelog
 
-All notable changes to csvformatter project will be documented in this file.
+All notable changes to this project will be documented in this file.
 
-## [0.0.5] - 2025-04-03
+## [0.0.6] - 2025-04-XX
+### Added
+- **Regex Filtering for -f Option:**  
+  Users can now specify regular expressions as filters by prefixing a filter value with `regex:`. For example, `-f 2-regex:^A.*$` will filter rows where column 2 matches the regular expression `^A.*$`.
+
 ### Changed
-- Fixed issue with the `-x` option; commands now execute correctly (e.g., awk, sed, grep).
-- Made editorial changes to the documentation and README.
+- **Execution Command (-x) Handling:**  
+  Improved the parsing and execution of shell commands (e.g., awk, grep, sed) so that commands are processed correctly without extraneous quotes.
+- **Editorial Updates:**  
+  Updated documentation and usage instructions for clarity.
+
+## [0.0.5] - 2025-04-01
+### Fixed
+- Resolved issues with the `-x` option for executing commands like `awk`.
+- Made minor editorial changes in the README.
 
 ## [0.0.4] - 2025-03-20
 ### Added
