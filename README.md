@@ -59,21 +59,29 @@ This extension contributes the following settings:
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.6 - 2025-04-XX
+- **Regex Filtering (-f):**  
+  Users can now filter rows using regular expressions by prefixing filter values with `regex:`.  
+  *Example:* `-f 2-regex:^A.*$` filters rows where column 2 starts with "A".
+- **Execution Handling (-x):**  
+  Improved parsing and execution of shell commands so that commands (e.g., awk, sed, grep) run without extraneous quotes.
+- **Editorial Updates:**  
+  Documentation and usage instructions have been updated for clarity.
 
-- Initial release of the CSVFormatter extension.
-- Added basic CSV formatting and parameter input via a WebView panel.
+### 0.0.5 - 2025-04-01
+- Fixed issues with the `-x` option for executing commands (e.g., awk).
+- Made minor editorial changes to the README.
 
-### 1.0.1
+### 0.0.4 - 2025-03-20
+- Added new parameter options for filtering and output formatting.
+- Improved error handling and logging throughout.
 
-- Fixed issues with parameter passing.
-- Improved UI alignment in the WebView form.
+### 0.0.3 - 2025-03-10
+- Resolved issues with column selection.
+- Improved formatting of the output table.
 
-### 1.1.0
-
-- Enhanced support for additional command-line options.
-- Improved error handling and logging.
-
+### 0.0.2 - 2025-03-01
+- Initial release with basic CSV formatting and parameter input via a WebView panel.
 ---
 
 ## Following extension guidelines
