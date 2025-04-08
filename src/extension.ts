@@ -144,7 +144,9 @@ function getWebviewContent() {
         </div>
         <div class="form-group">
           <label for="filter">Filter (-f):</label>
-          <input type="text" id="filter" name="filter" placeholder="e.g., 3-"regex:*.32M.*" or a simple 3-general>
+          <input type="text" id="filter" name="filter" placeholder="e.g., 3-regex:*.32M.* or a simple 3-general"
+           style="width: 400px; padding: 5px;"
+          >
         </div>
         <div class="form-group">
           <label for="execute">Execute (-x):</label>
@@ -152,7 +154,7 @@ function getWebviewContent() {
             type="text"
             id="execute"
             name="execute"
-            placeholder="1-&quot;awk -F. '{print $5}'&quot;"
+            placeholder="e.g., 1-&quot;awk -F. '{print $5}'&quot;"
             style="width: 400px; padding: 5px;"
           >          
         </div>
