@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.6] - 2025-04-XX
+## [0.0.6] - 2025-04-08
 ### Added
 - **Regex Filtering for -f Option:**  
   Users can now specify regular expressions as filters by prefixing a filter value with `regex:`. For example, `-f 2-regex:^A.*$` will filter rows where column 2 matches the regular expression `^A.*$`.
