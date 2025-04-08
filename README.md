@@ -15,7 +15,7 @@ csvformatter is an extension which works on CSV files to print them in a table f
    - **Max Size (-s):** Maximum character count per column (default is `20`; enter `all` to display full content).
    - **Columns (-c):** Specify the number of columns to display (e.g., `2` to display the first two columns).
    - **Range (-r):** Enter a list of column numbers separated by hyphens (e.g., `1-3-4`).
-   - **Filter (-f):** Filter rows by specifying a column and its values (e.g., `3-Integer-float`).
+   - **Filter (-f):** Filter rows by specifying a column and its values (e.g., `3-regex:.*64.*` or a simple `3-Integer-float`).
    - **Execute (-x):** Execute a shell command on a column value (e.g., `1-"awk -F. '{print $5}'"`).
    - **Query (-q):** Check this box to print the CSV header with column indices and exit.
    - **Output (-o):** Enter an output filename to save the formatted CSV (if left blank, the output will be shown in a new editor tab).
