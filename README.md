@@ -59,7 +59,7 @@ This extension contributes the following settings:
 
 ## Release Notes
 
-### 0.0.6 - 2025-04-XX
+### 0.0.6 - 2025-04-08
 - **Regex Filtering (-f):**  
   Users can now filter rows using regular expressions by prefixing filter values with `regex:`.  
   *Example:* `-f 2-regex:^A.*$` filters rows where column 2 starts with "A".
