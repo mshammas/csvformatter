@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.8] - 2025-04-12
+### Added
+- **Match Option (-m):**  
+  Added a new option to match rows that have the same values as a specified reference row at given columns. For example, `-m10-1-3-4-7` uses row 10 as the reference and selects rows with matching values in columns 1, 3, 4, and 7.
+- **Editorial Updates:**  
+  Updated documentation and usage instructions to include the new match functionality.
+
 ## [0.0.6] - 2025-04-08
 ### Added
 - **Regex Filtering for -f Option:**  
@@ -30,4 +37,4 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.2] - 2025-03-01
 ### Added
-- Initial version with basic CSV formatting.
+- Initial release with basic CSV formatting.

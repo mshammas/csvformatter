@@ -45,6 +45,9 @@ export function activate(context: vscode.ExtensionContext) {
       if (message.filter && message.filter.trim() !== '') {
         args.push('-f', message.filter.trim());
       }
+      if (message.match && message.match.trim() !== '') { // New -m option
+        args.push('-m', message.match.trim());
+      }
       if (message.execute && message.execute.trim() !== '') {
         // Do not wrap the command in additional quotes.
         const execParam = message.execute.trim();
@@ -144,19 +147,15 @@ function getWebviewContent() {
         </div>
         <div class="form-group">
           <label for="filter">Filter (-f):</label>
-          <input type="text" id="filter" name="filter" placeholder="e.g., 3-regex:*.32M.* or a simple 3-general"
-           style="width: 400px; padding: 5px;"
-          >
+          <input type="text" id="filter" name="filter" placeholder="e.g., 3-regex:*.32M.* or a simple 3-general" style="width: 400px; padding: 5px;">
+        </div>
+        <div class="form-group">
+          <label for="match">Match (-m):</label>
+          <input type="text" id="match" name="match" placeholder="e.g., 10-1-3-4-7" style="width: 400px; padding: 5px;">
         </div>
         <div class="form-group">
           <label for="execute">Execute (-x):</label>
-          <input
-            type="text"
-            id="execute"
-            name="execute"
-            placeholder="e.g., 1-&quot;awk -F. '{print $5}'&quot;"
-            style="width: 400px; padding: 5px;"
-          >          
+          <input type="text" id="execute" name="execute" placeholder="e.g., 1-&quot;awk -F. '{print $5}'&quot;" style="width: 400px; padding: 5px;">          
         </div>
         <div class="form-group">
           <label for="query">Query (-q):</label>
@@ -168,7 +167,6 @@ function getWebviewContent() {
         </div>
         <button type="submit">Submit</button>
       </form>
-
       <script>
         const vscode = acquireVsCodeApi();
         document.getElementById('csvForm').addEventListener('submit', (event) => {
@@ -178,6 +176,7 @@ function getWebviewContent() {
             columns: document.getElementById('columns').value,
             range: document.getElementById('range').value,
             filter: document.getElementById('filter').value,
+            match: document.getElementById('match').value,
             execute: document.getElementById('execute').value,
             query: document.getElementById('query').checked,
             output: document.getElementById('output').value

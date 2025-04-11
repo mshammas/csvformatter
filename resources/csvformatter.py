@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 csvformatter.py 
-author : Mohammed Shammas (mshammas@in.ibm.com)
+author : Mohammed Shammas Oliyath (mohammed.shammas@gmail.com)
 version: Initial (Mar 2025)
 
-usage: csvformatter.py [-h] [-s SIZE] [-c COLUMNS] [-r RANGE] [-f FILTER]
+usage: csvformatter.py [-h] [-s SIZE] [-c COLUMNS] [-r RANGE] [-f FILTER] [-m MATCH]
                        [-x EXECUTE] [-q] [-o OUTPUT]
                        csv_file
 
@@ -48,6 +48,11 @@ Options:
          -f 2-regex:^A.*$
       (In the second example, rows where column 2 matches the regex '^A.*$' are shown.)
 
+  -m, --match <row>-<col1>-<col2>-...
+      Match rows that have the same values as the specified reference row at the given columns.
+      For example, -m10-1-3-4-7 uses row 10 as the reference (1-indexed) and only prints rows
+      that have the same values in columns 1, 3, 4 and 7 as row 10.
+      
   -x, --execute <column>-<command>
       Execute a shell command on the value of the specified column (1-indexed).
       The command receives the cell value via standard input, and its output replaces the original value.
@@ -132,6 +137,10 @@ Options:
          -f 3-Integer-float
          -f 2-regex:^A.*$
 
+  -m, --match <row>-<col1>-<col2>-...
+      Match rows that have the same values as the specified reference row at the given columns.
+      Example: -m10-1-3-4-7
+
   -x, --execute <column>-<command>
       Execute a shell command on a column value. Format: <column>-<command>.
       Example: -x 1-"awk -F. '{print \\$5}'" 
@@ -157,6 +166,9 @@ Options:
     parser.add_argument("-f", "--filter", type=str,
                         help="Filter rows in the format <column>-<value1>-<value2>-... "
                              "For regex filtering prefix a value with 'regex:'")
+    parser.add_argument("-m", "--match", type=str,
+                        help="Match rows that have the same values as the specified reference row at given columns. "
+                             "Format: <row>-<col1>-<col2>-... (e.g., -m10-1-3-4-7)")
     parser.add_argument("-x", "--execute", action="append",
                         help="Execute a shell command on a column value. Format: <column>-<command>.")
     parser.add_argument("-q", "--quick", action="store_true",
@@ -177,7 +189,7 @@ Options:
             print(f"{index}: {col}")
         sys.exit(0)
 
-    # Process filtering - support literal and regex filters
+    # Process filtering (-f option) - support literal and regex filters
     if args.filter is not None:
         try:
             filter_parts = args.filter.split("-")
@@ -221,6 +233,41 @@ Options:
                 if matched:
                     filtered_rows.append(row)
         data = [header] + filtered_rows
+
+    # Process match (-m option)
+    if args.match is not None:
+        try:
+            # Expecting format: <row>-<col1>-<col2>-...
+            match_parts = args.match.split("-")
+            if len(match_parts) < 2:
+                raise ValueError("Invalid match format. Expected <row>-<col1>-<col2>-...")
+            ref_row = int(match_parts[0])
+            ref_index = ref_row - 1  # convert to 0-indexed
+            col_indices = [int(x) - 1 for x in match_parts[1:]]
+            if ref_index < 0 or ref_index >= len(data):
+                raise ValueError("Reference row number out of range.")
+            ref_values = []
+            for col in col_indices:
+                if col < len(data[ref_index]):
+                    ref_values.append(data[ref_index][col])
+                else:
+                    ref_values.append("")
+        except Exception as e:
+            print(f"Error processing match option: {e}")
+            sys.exit(1)
+        
+        # Preserve header row and filter other rows based on match
+        header = data[0]
+        matched_rows = [header]
+        for i, row in enumerate(data[1:], start=1):
+            match_all = True
+            for col, ref_val in zip(col_indices, ref_values):
+                if col >= len(row) or row[col] != ref_val:
+                    match_all = False
+                    break
+            if match_all:
+                matched_rows.append(row)
+        data = matched_rows
 
     if args.range is not None:
         try:

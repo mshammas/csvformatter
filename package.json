@@ -7,7 +7,7 @@
     "url": "https://github.com/mshammas/csvformatter.git"
   },  
   "description": "Extension to format print a CSV file with variety of filtering options.",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "icon": "logo.png",
   "engines": {
     "vscode": "^1.98.0"
