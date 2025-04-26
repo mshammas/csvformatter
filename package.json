@@ -1,12 +1,12 @@
 {
   "name": "csvformatter",
   "displayName": "CSVFormatter",
-  "publisher": "shammas",  
+  "publisher": "shammas",
   "repository": {
     "type": "git",
     "url": "https://github.com/mshammas/csvformatter.git"
-  },  
-  "description": "Extension to format print a CSV file with variety of filtering options.",
+  },
+  "description": "Extension to format and filter CSV files with a rich set of command-line options.",
   "version": "0.0.8",
   "icon": "logo.png",
   "engines": {
@@ -16,14 +16,14 @@
     "Other"
   ],
   "activationEvents": [
-    
+    "onCommand:csvformatter.format"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "csvformatter.format",
-        "title": "CSVFormatter: Fortmat CSV"
+        "title": "CSVFormatter: Format CSV"
       }
     ],
     "configuration": {

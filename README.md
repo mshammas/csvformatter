@@ -1,6 +1,6 @@
 # csvformatter README
 
-csvformatter is an extension which works on CSV files to print them in a table format. It also provides a variety of options to filter and manipulate columns.
+csvformatter is an extension which works on CSV files to print them in a table format. It also provides a variety of options to filter, match, and transform columns.
 
 ## Usage
 
@@ -11,127 +11,136 @@ csvformatter is an extension which works on CSV files to print them in a table f
    Open the Command Palette (`Ctrl+Shift+P` on Windows/Linux or `Cmd+Shift+P` on macOS) and select **CSVFormatter: Format CSV**.
 
 3. **Enter Parameters**  
-   A web view panel will open on the right side of your editor. Fill in the parameters:
-   - **Max Size (-s):** Maximum character count per column (default is `20`; enter `all` to display full content).
-   - **Columns (-c):** Specify the number of columns to display (e.g., `2` to display the first two columns).
-   - **Range (-r):** Enter a list of column numbers separated by hyphens (e.g., `1-3-4`).
-   - **Filter (-f):** Filter rows by specifying a column and its values.  
-     For literal matches, supply values separated by dashes (e.g., `3-Integer-float`).  
-     For regex filtering, prefix a value with `regex:` (e.g., `3-regex:.*64.*`).
-   - **Match (-m):** Match rows that have the same values as a specified reference row at given columns.  
-     **Format:** `<row>-<col1>-<col2>-...` (e.g., `10-1-3-4-7` means that row 10 is used as a reference and only rows with the same values in columns 1, 3, 4, and 7 will be printed).
-   - **Execute (-x):** Execute a shell command on a column value (e.g., `1-"awk -F. '{print $5}'"`).  
-     **Note:** If both -m and -x are given, the match filter (-m) is applied first, and then the execution commands (-x) are applied on the filtered rows.
-   - **Query (-q):** Check this box to print the CSV header with column indices and exit.
-   - **Output (-o):** Enter an output filename to save the formatted CSV (if left blank, the output will be shown in a new editor tab).
+   A webview panel will open on the right side of your editor. Fill in the parameters:
+   - **Max Size (`-s`)**  
+     Maximum character count per column (default is `20`; enter `all` to display full content).
+   - **Columns (`-c`)**  
+     Specify the number of columns to display (e.g., `2` to display the first two columns).
+   - **Range (`-r`)**  
+     Enter a list of column numbers separated by hyphens (e.g., `1-3-4`).
+   - **Filter (`-f`)**  
+     You can click the **+** button to add as many filter fields as you like. Each one is applied in sequence.  
+     - For literal matches, supply values separated by dashes (e.g., `3-Integer-float`).  
+     - For regex filtering, prefix a value with `regex:` (e.g., `3-regex:.*64.*`).
+   - **Match (`-m`)**  
+     Match rows that have the same values as a specified reference row at given columns.  
+     **Format:** `<row>-<col1>-<col2>-...`  
+     *Example:* `10-1-3-4-7` uses row 10 as the reference and only rows matching those column values are kept.
+   - **Execute (`-x`)**  
+     Execute a shell command on a column’s value (e.g., `1-"awk -F. '{print $5}'"`).  
+     *Note:* If both `-m` and `-x` are given, matching is applied first, then commands run on the filtered rows.
+   - **Query (`-q`)**  
+     Check this box to print the CSV header with column indices and exit.
+   - **Output (`-o`)**  
+     Enter an output filename to save the formatted CSV (if left blank, the output is shown in a new editor tab).
 
 4. **Submit the Form**  
-   Click **Submit**. The extension will run the Python script with your parameters, and you’ll see the formatted output either in a new tab or saved to the specified file.
+   Click **Submit**. The extension runs the Python script with your parameters, and you’ll see the formatted output either in a new tab or saved to the specified file.
 
 ## Features
 
-- **CSV Formatting:**  
-  Format CSV files into a clean, tabular view using a Python script.
-- **Interactive Parameter Input:**  
-  Provides an intuitive split-view web form with text boxes and checkboxes to input parameters such as maximum size, columns, range, filter, match, execute commands, query flag, and output file.
-- **Command-Line Options:**  
-  Supports various options (-s, -c, -r, -f, -m, -x, -q, -o) to customize the CSV output.
-- **User-Friendly Interface:**  
-  The web view panel opens split on the right, making it easy to enter options while viewing your CSV file.
+- **Multi-step Filtering (`-f`)**  
+  Add multiple filter rules in sequence via the “+” button.
+- **Regex & Literal Filters**  
+  Use `regex:` prefix for regular-expression matching.
+- **Row Matching (`-m`)**  
+  Select rows based on matching values in a reference row.
+- **Shell-Command Execution (`-x`)**  
+  Run commands like `awk`, `grep`, or `sed` on cell values.
+- **Flexible Column Selection**  
+  Use `-r` or `-c` to choose specific columns or a range.
+- **Query Mode (`-q`)**  
+  Quickly view column indices without formatting.
+- **Output to File (`-o`)**  
+  Save results to disk instead of just showing in VS Code.
+- **Dynamic UI**  
+  Easily add or remove filter inputs in the webview form.
 
 ![CSV Formatter Screenshot](images/csvformatter.png)
 
-> Tip: Consider adding short animations or additional screenshots to showcase your extension in action.
+> Tip: Short animations or additional screenshots can really showcase your extension in action!
 
 ## Requirements
 
-- **Python 3:**  
-  Ensure that Python 3 is installed and accessible (i.e., the `python3` command is available in your PATH).
-- **Visual Studio Code:**  
-  Requires VS Code version 1.x or later.
+- **Python 3**  
+  Ensure `python3` is on your PATH.
+- **Visual Studio Code**  
+  Requires VS Code 1.x or later.
 
 ## Extension Settings
 
-This extension contributes the following settings:
+This extension contributes:
 
 * `csvformatter.enable`: Enable/disable the CSV Formatter extension.
-* `csvformatter.someSetting`: (Example setting) Set to `true` to enable additional features.
+* `csvformatter.someSetting`: (Example) Set to `true` to enable additional features.
 
 ## Known Issues
 
-- The extension depends on Python 3. If Python 3 is not installed or configured correctly, the extension might not function as expected.
-- Improperly formatted CSV files might cause the Python script to return errors.
+- Depends on Python 3. If not installed/configured correctly, the extension may fail.
+- Malformed CSV files can produce script errors.
 
 ## Release Notes
 
-### 0.0.8 - 2025-04-12
-- **Match Option (-m):**  
-  Added a new option to match rows that have the same values as a specified reference row at given columns.  
-  *Example:* `-m10-1-3-4-7` uses row 10 as the reference and selects rows with matching values in columns 1, 3, 4, and 7.
-- **Editorial Updates:**  
-  Updated documentation and usage instructions to include the new match functionality.
+### 0.0.8 - 2025-04-XX
+- **Multi-filter Support (`-f`):**  
+  You can now specify `-f` multiple times (via the “+” button) and filters are applied one after another.
+- **Dynamic UI:**  
+  Added a **+** button to add more `-f` fields in the webview.
+- **Documentation Updates:**  
+  README and examples updated to show multi-`-f` usage.
+
+### 0.0.7 - 2025-04-XX
+- **Match Option (`-m`):**  
+  New feature to match rows based on a reference row’s values in specified columns.
+- **Minor Editorial Edits**  
 
 ### 0.0.6 - 2025-04-08
-- **Regex Filtering (-f):**  
-  Users can now filter rows using regular expressions by prefixing filter values with `regex:`.  
-  *Example:* `-f 2-regex:^A.*$` filters rows where column 2 starts with "A".
-- **Execution Handling (-x):**  
-  Improved parsing and execution of shell commands so that commands (e.g., awk, sed, grep) run without extraneous quotes.
+- **Regex Filtering (`-f`):** Prefix filter values with `regex:` for regex matches.
+- **Improved Execution Handling (`-x`)**  
 
 ### 0.0.5 - 2025-04-01
-- Fixed issues with the `-x` option for executing commands (e.g., awk).
-- Made minor editorial changes to the README.
+- **Bug Fix:** Resolved issues with the `-x` option (e.g., `awk` handling).
+- **Editorial Updates**  
 
 ### 0.0.4 - 2025-03-20
-- Added new parameter options for filtering and output formatting.
-- Improved error handling and logging throughout.
+- **Added** new options for filtering and output formatting.
+- **Improved** error handling and logging.
 
 ### 0.0.3 - 2025-03-10
-- Resolved issues with column selection.
-- Improved formatting of the output table.
+- **Fixed** column-selection issues.
+- **Enhanced** table formatting.
 
 ### 0.0.2 - 2025-03-01
-- Initial release with basic CSV formatting and parameter input via a WebView panel.
+- **Initial release** with basic CSV formatting and webview parameter input.
+
 ---
 
 ## Q&A
 
-**Q: What does CSVFormatter do?**  
-**A:** CSVFormatter formats CSV files into a clean, tabular view and provides options for filtering rows, matching rows based on a reference row, and executing shell commands on CSV data.
+**Q: How do I apply multiple filters?**  
+A: Click the **+** next to a filter field to add another. Each is applied in the order you enter them (e.g. `-f 2-Apple -f 3-Banana`).
 
-**Q: How do I use the -f (filter) option?**  
-**A:** The `-f` option filters rows based on the content of a specified column. For literal matches, provide values separated by dashes (e.g., `3-Integer-float`). To use regex filtering, prefix a value with `regex:` (e.g., `3-regex:.*64.*`).
+**Q: What’s the difference between `-f` and `-m`?**  
+A:  
+- `-f` applies value or regex filters on a single column.  
+- `-m` matches rows against a reference row’s values in multiple columns.
 
-**Q: How does the -m (match) option work?**  
-**A:** The `-m` option lets you match rows that have the same values as a reference row at specified columns.  
-*Format:* `<row>-<col1>-<col2>-...`  
-*Example:* `-m10-1-3-4-7` means row 10 is used as the reference, and only rows with matching values in columns 1, 3, 4, and 7 are included.
+**Q: Which runs first, `-m` or `-x`?**  
+A: `-m` (match) is applied before `-x` (execute).
 
-**Q: Which option is applied first if both -m and -x are used?**  
-**A:** When both options are provided, the match (-m) filter is applied first, and then the execution (-x) commands run on the filtered rows.
-
-**Q: How do I report issues or request features?**  
-**A:** You can post questions or report issues in the Q&A section on the Visual Studio Marketplace or open an issue in our [GitHub repository](https://github.com/yourusername/csvformatter).
+**Q: How can I report issues?**  
+A: Post in the Q&A on the Marketplace or open an issue at [github.com/mshammas/csvformatter](https://github.com/mshammas/csvformatter).
 
 ---
 
 ## Following Extension Guidelines
 
-Ensure that you've read through the extension guidelines and follow the best practices for creating your extension.
-
 * [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
 
 ## Working with Markdown
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For More Information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+* Split editor: `Cmd+\` / `Ctrl+\`  
+* Toggle preview: `Shift+Cmd+V` / `Shift+Ctrl+V`  
+* Markdown snippets: `Ctrl+Space`
 
 **Enjoy!**
