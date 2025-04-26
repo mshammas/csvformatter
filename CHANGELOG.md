@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.8] - 2025-04-26
+## [0.0.9] - 2025-04-26
 ### Added
 - **Multi-filter Support (`-f`)**  
   Users can now click the **+** button and specify multiple `-f` rules; they apply sequentially.
@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - **Documentation**  
   UPDATED examples and usage in README.
 
-## [0.0.7] - 2025-04-XX
+## [0.0.8] - 2025-04-12
 ### Added
 - **Match Option (`-m`)**  
   New feature to select rows that match a reference row’s values in specified columns.
